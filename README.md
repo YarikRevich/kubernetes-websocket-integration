@@ -1,4 +1,4 @@
-# $(project name)
+# kubernetes-websocket-integration
 
 ![Linux](https://svgshare.com/i/Zhy.svg)
 ![macOS](https://svgshare.com/i/ZjP.svg)
