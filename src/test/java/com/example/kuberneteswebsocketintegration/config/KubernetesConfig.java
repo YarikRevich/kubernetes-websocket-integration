@@ -17,7 +17,7 @@ public class KubernetesConfig extends K3sEnvironment{
     /**
      * Configures local Kubernetes cluster config for test
      */
-    @Bean
+    // @Bean
     public void configureKubernetesConfig() {
         ApiClient client = null;
         try {

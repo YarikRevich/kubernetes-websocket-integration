@@ -13,6 +13,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.messaging.converter.StringMessageConverter;
@@ -20,25 +21,20 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.k3s.K3sContainer;
-// import org.testcontainers.utility.DockerImageName;
 
 import com.example.kuberneteswebsocketintegration.util.endpoint.Endpoints;
 import com.example.kuberneteswebsocketintegration.util.endpoint.TestServer;
-import com.example.kuberneteswebsocketintegration.util.environment.K3sEnvironment;
 import com.example.kuberneteswebsocketintegration.util.topic.Topics;
 
-// import lombok.extern.slf4j.Slf4j;
-
-@Testcontainers
+// @Testcontainers
+@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PodTrackingServiceTests extends K3sEnvironment{
+public class PodTrackingServiceTests{
     @LocalServerPort
     private Integer port;
 
@@ -86,7 +82,7 @@ public class PodTrackingServiceTests extends K3sEnvironment{
             }
         });
 
-        
+
         session.send(TestServer.getDestinationPath(Endpoints.POD), null);
         await()
                 .atMost(1, TimeUnit.SECONDS)

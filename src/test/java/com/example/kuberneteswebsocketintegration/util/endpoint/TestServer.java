@@ -11,7 +11,7 @@ public class TestServer {
      *         to a local server
      */
     public static String getServerEndpoint(int port){
-        return String.format("ws://localhost:%d/ws");
+        return String.format("ws://localhost:%d/ws", port);
     }
 
     /**
