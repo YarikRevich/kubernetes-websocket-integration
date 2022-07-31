@@ -1,6 +1,6 @@
 package com.example.kuberneteswebsocketintegration.service.tracking.common;
 
-public interface TrackingService {
+public interface ITrackingService {
     /**
      * Handles request for a certain type of resource
      */

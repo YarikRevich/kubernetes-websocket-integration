@@ -27,17 +27,18 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.k3s.K3sContainer;
-import org.testcontainers.utility.DockerImageName;
+// import org.testcontainers.utility.DockerImageName;
 
+import com.example.kuberneteswebsocketintegration.util.endpoint.Endpoints;
 import com.example.kuberneteswebsocketintegration.util.endpoint.TestServer;
+import com.example.kuberneteswebsocketintegration.util.environment.K3sEnvironment;
 import com.example.kuberneteswebsocketintegration.util.topic.Topics;
 
-import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PodTrackingServiceTests {
+public class PodTrackingServiceTests extends K3sEnvironment{
     @LocalServerPort
     private Integer port;
 
@@ -47,10 +48,6 @@ public class PodTrackingServiceTests {
     public void setUp() {
         this.webSocketStompClient = new WebSocketStompClient(new SockJsClient(
                 List.of(new WebSocketTransport(new StandardWebSocketClient()))));
-
-                K3sContainer k3s = new K3sContainer(DockerImageName.parse("rancher/k3s:v1.21.3-k3s1"))
-    .withLogConsumer(new Slf4jLogConsumer(log));
-    
     }
 
     /**
@@ -78,7 +75,6 @@ public class PodTrackingServiceTests {
         }
 
         session.subscribe(Topics.POD, new StompFrameHandler() {
-
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return String.class;
@@ -90,7 +86,8 @@ public class PodTrackingServiceTests {
             }
         });
 
-        session.send("/app/welcome", "Mike");
+        
+        session.send(TestServer.getDestinationPath(Endpoints.POD), null);
         await()
                 .atMost(1, TimeUnit.SECONDS)
                 .untilAsserted(() -> assertEquals("Hello, Mike!", blockingQueue.poll()));
