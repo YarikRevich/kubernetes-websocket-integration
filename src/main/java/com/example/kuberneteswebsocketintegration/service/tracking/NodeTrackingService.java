@@ -22,16 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class NodeTrackingService implements ITrackingService {
     @Autowired
-    private SimpMessagingTemplate template;
-
-    @Autowired
     private KubernetesService kubernetesService;
 
     /**
      * Handles service request to fetch pod data in some
      * period of time
      */
-    public void handle() {
+    public void handle(SimpMessagingTemplate template) {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         Runnable task = new Runnable() {
             public void run() {

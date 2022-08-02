@@ -2,9 +2,11 @@ package com.example.kuberneteswebsocketintegration.service.tracking;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class PodTrackingService implements ITrackingService{
-    @Autowired
-    private SimpMessagingTemplate template;
-
+public class PodTrackingService implements ITrackingService {
     @Autowired
     private KubernetesService kubernetesService;
 
@@ -27,14 +26,19 @@ public class PodTrackingService implements ITrackingService{
      * Handles service request to fetch pod data in some
      * period of time
      */
-    public void handle() {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    public void handle(SimpMessagingTemplate template) {
+        ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(2);
         Runnable task = new Runnable() {
             public void run() {
-                template.convertAndSend(Topics.POD, kubernetesService.getAllPods());
+                try {
+                    String pods = kubernetesService.getAllPods();
+                    template.convertAndSend(Topics.POD, pods);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
                 log.info(String.format("Send data to %s topic", Topics.POD));
             }
         };
-        executor.scheduleAtFixedRate(task, 0, 3, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(task, 0, 800, TimeUnit.MILLISECONDS);
     }
 }

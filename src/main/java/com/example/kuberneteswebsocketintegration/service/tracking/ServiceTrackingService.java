@@ -21,31 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ServiceTrackingService implements ITrackingService{
     @Autowired
-    private SimpMessagingTemplate template;
-
-    @Autowired
     private KubernetesService kubernetesService;
-
-    /**
-     * Fetches data about services from local kubernetes client
-     * @return payload for request handler
-     */
-    public static String getPayload() {
-        CoreV1Api api = new CoreV1Api();
-        V1ServiceList list = null;
-        try {
-            list = api.listServiceForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
-        return list.toString();
-    }
 
     /**
      * Handles service request to fetch service data in some
      * period of time
      */
-    public void handle() {
+    public void handle(SimpMessagingTemplate template) {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         Runnable task = new Runnable() {
             public void run() {

@@ -1,19 +1,15 @@
 package com.example.kuberneteswebsocketintegration.service.tracking;
 
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.messaging.converter.StringMessageConverter;
@@ -27,16 +23,18 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import com.example.kuberneteswebsocketintegration.util.endpoint.Endpoints;
+import com.example.kuberneteswebsocketintegration.service.kubernetes.KubernetesService;
 import com.example.kuberneteswebsocketintegration.util.endpoint.TestServer;
 import com.example.kuberneteswebsocketintegration.util.topic.Topics;
 
-// @Testcontainers
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PodTrackingServiceTests{
+public class PodTrackingServiceTests {
     @LocalServerPort
     private Integer port;
+
+    @Autowired
+    private KubernetesService kubernetesService;
 
     private WebSocketStompClient webSocketStompClient;
 
@@ -46,31 +44,26 @@ public class PodTrackingServiceTests{
                 List.of(new WebSocketTransport(new StandardWebSocketClient()))));
     }
 
-    /**
-     * Tests if received payload of pod data
-     * equals to the expected payload
-     */
+    // webSocketStompClient.setMessageConverter(new StringMessageConverter());
+    // webSocketStompClient.setMessageConverter(new ByteArrayMessageConverter());
+    // webSocketStompClient.setMessageConverter(new
+    // MappingJackson2MessageConverter());
+
+
     @Test
-    public void verifyPayloadIsReceived() {
+    void verifyGreetingIsReceived() throws Exception {
+
         BlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(1);
 
         webSocketStompClient.setMessageConverter(new StringMessageConverter());
 
-        StompSession session = null;
-        try {
-            session = webSocketStompClient
-                    .connect(TestServer.getServerEndpoint(port), new StompSessionHandlerAdapter() {
-                    })
-                    .get(1, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
+        StompSession session = webSocketStompClient
+                .connect(TestServer.getServerEndpoint(port), new StompSessionHandlerAdapter() {
+                })
+                .get(1, TimeUnit.SECONDS);
 
         session.subscribe(Topics.POD, new StompFrameHandler() {
+
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return String.class;
@@ -78,14 +71,22 @@ public class PodTrackingServiceTests{
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
+                // System.out.println(payload);
                 blockingQueue.add((String) payload);
             }
         });
 
+        TimeUnit.SECONDS.sleep(5);
 
-        session.send(TestServer.getDestinationPath(Endpoints.POD), null);
-        await()
-                .atMost(1, TimeUnit.SECONDS)
-                .untilAsserted(() -> assertEquals("Hello, Mike!", blockingQueue.poll()));
+        session.send("/app/pod", "");
+
+        TimeUnit.SECONDS.sleep(15);
+        // assertNotNull(blockingQueue.poll());
+        System.out.println(blockingQueue.poll());
+        // await()
+                // .atMost(5, TimeUnit.SECONDS)
+                // .untilAsserted(() -> assertNotNull(blockingQueue.poll()));
+                // .untilAsserted(() -> assertEquals(kubernetesService.getAllPods(), ));
+        // blockingQueue.poll()));
     }
 }
