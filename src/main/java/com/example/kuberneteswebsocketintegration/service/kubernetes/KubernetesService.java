@@ -6,11 +6,14 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1NodeList;
 import io.kubernetes.client.openapi.models.V1PodList;
+import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.openapi.models.V1ServiceList;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Wrapper for fetching data from Kubernetes cluster
  */
+@Slf4j
 @Service
 public class KubernetesService {
     /**
@@ -23,7 +26,7 @@ public class KubernetesService {
         try {
             list = api.listPodForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
         } catch (ApiException e) {
-            e.printStackTrace();
+            log.error("Kubernetes API is not accessible");
         }
         return list.toString();
     }
@@ -32,15 +35,18 @@ public class KubernetesService {
      * Fetches data of all services in Kubernetes cluster
      * @return output of all services in YAML format
      */
-    public String getAllServices(){
+    public V1ServiceList getAllServices(){
         CoreV1Api api = new CoreV1Api();
         V1ServiceList list = null;
         try {
             list = api.listServiceForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
         } catch (ApiException e) {
-            e.printStackTrace();
+            log.error("Kubernetes API is not accessible");
         }
-        return list.toString();
+        // for (V1Service service : list.getItems()){
+        //     service.getSpec().getPorts().get(0).getTargetPort()
+        // }
+        return list;
     }
 
     /**
@@ -53,7 +59,7 @@ public class KubernetesService {
         try {
             list = api.listNode(null, false, null, null, null, null, null, null, 0, false);
         } catch (ApiException e) {
-            e.printStackTrace();
+            log.error("Kubernetes API is not accessible");
         }
         return list.toString();
     }

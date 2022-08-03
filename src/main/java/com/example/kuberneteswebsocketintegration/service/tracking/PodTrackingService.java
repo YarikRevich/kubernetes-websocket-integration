@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import com.example.kuberneteswebsocketintegration.service.kubernetes.KubernetesService;
 import com.example.kuberneteswebsocketintegration.service.tracking.common.ITrackingService;
@@ -31,8 +32,9 @@ public class PodTrackingService implements ITrackingService {
         Runnable task = new Runnable() {
             public void run() {
                 try {
-                    String pods = kubernetesService.getAllPods();
-                    template.convertAndSend(Topics.POD, pods);
+                    
+                    System.out.println(kubernetesService.getAllPods());
+                    template.convertAndSend(Topics.POD, HtmlUtils.htmlEscape(kubernetesService.getAllPods()));
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }
