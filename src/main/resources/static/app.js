@@ -10,6 +10,12 @@ function setConnected(connected) {
         $("#conversation").hide();
     }
     $("#greetings").html("");
+
+    var editor = new JsonEditor('#json-display', getJson());
+
+    $('#translate').on('click', function () {
+        editor.load(getJson());
+    });
 }
 
 function connect() {
@@ -19,7 +25,7 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/pod', function (greeting) {
-            showGreeting(greeting);
+            // showGreeting(greeting.body);
         });
     });
 }
@@ -33,7 +39,7 @@ function disconnect() {
 }
 
 function sendName() {
-    stompClient.send("/app/pod", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("/app/pod", {}, JSON.stringify({ 'name': $("#name").val() }));
 }
 
 function showGreeting(message) {
@@ -44,7 +50,7 @@ $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
+    $("#connect").click(function () { connect(); });
+    $("#disconnect").click(function () { disconnect(); });
+    $("#send").click(function () { sendName(); });
 });

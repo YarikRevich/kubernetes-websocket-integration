@@ -1,0 +1,25 @@
+asyncapi: 2.2.0
+info:
+  title: "kubernetes-websocket"
+  description: "WebSocket integration for kubernetes cluster"
+  version: '1.0.0'
+channels:
+  /topic/pod:
+    subscribe:
+      description: "Lists all the pods in the cluster"
+      message:
+        payload:
+          type: string
+  /topic/service:
+    subscribe:
+      description: "Lists all the services in the cluster"
+      message:
+        payload:
+          type: string
+  /topic/node:
+    subscribe:
+      description: "Lists all the nodes in the cluster"
+      message:
+        payload:
+          type: string
+  

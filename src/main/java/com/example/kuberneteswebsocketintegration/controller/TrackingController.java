@@ -6,6 +6,7 @@ import org.springframework.messaging.core.MessageSendingOperations;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -74,7 +75,8 @@ public class TrackingController {
 
     // }
 
-    @MessageMapping(Endpoints.POD)
+    @SubscribeMapping(Endpoints.POD)
+    @SendTo("/topic/pod")
     public void sendPods() {
         podTrackerService.handle(template);
     }

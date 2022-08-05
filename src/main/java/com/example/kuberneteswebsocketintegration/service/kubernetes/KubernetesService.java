@@ -1,6 +1,9 @@
 package com.example.kuberneteswebsocketintegration.service.kubernetes;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
 
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -16,11 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class KubernetesService {
+    
+
+
     /**
      * Fetches data of all pods in Kubernetes cluster
      * @return output of all pods in YAML format
      */
-    public String getAllPods() {
+    public V1PodList getAllPods() {
         CoreV1Api api = new CoreV1Api();
         V1PodList list = null;
         try {
@@ -28,7 +34,7 @@ public class KubernetesService {
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
-        return list.toString();
+        return list;
     }
 
     /**
@@ -44,8 +50,10 @@ public class KubernetesService {
             log.error("Kubernetes API is not accessible");
         }
         // for (V1Service service : list.getItems()){
-        //     service.getSpec().getPorts().get(0).getTargetPort()
+        //     service.getSpec().getPorts().get(0).getTargetPort().getStrValue()
         // }
+        
+        // System.out.println(gson.toJson(list));
         return list;
     }
 

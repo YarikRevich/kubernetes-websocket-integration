@@ -1,7 +1,5 @@
 package com.example.kuberneteswebsocketintegration.service.tracking;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -9,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 import com.example.kuberneteswebsocketintegration.service.kubernetes.KubernetesService;
 import com.example.kuberneteswebsocketintegration.service.tracking.common.ITrackingService;
@@ -32,15 +29,13 @@ public class PodTrackingService implements ITrackingService {
         Runnable task = new Runnable() {
             public void run() {
                 try {
-                    
-                    System.out.println(kubernetesService.getAllPods());
-                    template.convertAndSend(Topics.POD, HtmlUtils.htmlEscape(kubernetesService.getAllPods()));
+                    template.convertAndSend(Topics.POD, kubernetesService.getAllPods());
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }
                 log.info(String.format("Send data to %s topic", Topics.POD));
             }
         };
-        scheduler.scheduleAtFixedRate(task, 0, 800, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(task, 0, 3, TimeUnit.SECONDS);
     }
 }

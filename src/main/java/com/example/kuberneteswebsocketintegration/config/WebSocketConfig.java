@@ -1,23 +1,27 @@
 package com.example.kuberneteswebsocketintegration.config;
 
+import java.lang.reflect.Type;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.messaging.converter.ByteArrayMessageConverter;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.GsonMessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
-import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
 import com.example.kuberneteswebsocketintegration.util.endpoint.Endpoints;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
+// import com.fasterxml.jackson.annotation.JsonInclude.Include;
+// import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 /**
  * Configuration for used websocket protocol
@@ -33,10 +37,21 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
   public boolean configureMessageConverters(List<MessageConverter> converters) {
-    
-    MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-    ObjectMapper objectMapper = converter.getObjectMapper();
-    objectMapper.findAndRegisterModules();
+    JsonSerializer<OffsetDateTime> serializer = new JsonSerializer<OffsetDateTime>() {
+      @Override
+      public JsonElement serialize(OffsetDateTime src, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject result = new JsonObject();
+
+        result.addProperty("dateTime", src.toString());
+
+        return result;
+      }
+    };
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapter(OffsetDateTime.class, serializer)
+        .create();
+    GsonMessageConverter converter = new GsonMessageConverter();
+    converter.setGson(gson);
     converters.add(converter);
     return false;
   }
@@ -47,7 +62,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   }
 
   @Override
-  public void configureWebSocketTransport(WebSocketTransportRegistration registration){
+  public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
     registration.setMessageSizeLimit(30 * 10000);
     registration.setSendBufferSizeLimit(60 * 10000);
   }
