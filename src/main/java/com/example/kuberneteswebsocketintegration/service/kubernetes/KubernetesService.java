@@ -61,7 +61,7 @@ public class KubernetesService {
      * Fetches data of all nodes in Kubernetes cluster
      * @return output of all nodes in YAML format
      */
-    public String getAllNodes(){
+    public V1NodeList getAllNodes(){
         CoreV1Api api = new CoreV1Api();
         V1NodeList list = null;
         try {
@@ -69,6 +69,6 @@ public class KubernetesService {
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
-        return list.toString();
+        return list;
     }
 }

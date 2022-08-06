@@ -1,6 +1,7 @@
 package com.example.kuberneteswebsocketintegration.service.kubernetes;
 
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,9 +22,16 @@ public class KubernetesServiceTests {
     public static K3sContainer k3s = new K3sContainer(DockerImageName.parse("rancher/k3s:v1.21.3-k3s1"))
             .withLogConsumer(new Slf4jLogConsumer(log));
 
-    public void testGetAllPods(){
+    @Autowired
+    KubernetesService kubernetesService;
 
+    public void testGetAllPods(){
+        kubernetesService.getAllPods();
     }
-    public void testGetAllServices(){}
-    public void testGetAllNodes(){}
+    public void testGetAllServices(){
+        kubernetesService.getAllServices();
+    }
+    public void testGetAllNodes(){
+        kubernetesService.getAllNodes();
+    }
 }
