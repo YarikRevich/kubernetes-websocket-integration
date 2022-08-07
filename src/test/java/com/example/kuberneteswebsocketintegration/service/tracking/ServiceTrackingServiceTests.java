@@ -1,14 +1,12 @@
 package com.example.kuberneteswebsocketintegration.service.tracking;
 
-import static org.mockito.Mockito.atLeastOnce;
+import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.concurrent.TimeUnit;
 
-import static org.awaitility.Awaitility.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,23 +16,19 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.k3s.K3sContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import com.example.kuberneteswebsocketintegration.config.KubernetesConfig;
 import com.example.kuberneteswebsocketintegration.service.kubernetes.KubernetesService;
 import com.example.kuberneteswebsocketintegration.util.topic.Topics;
 
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.Configuration;
-import io.kubernetes.client.openapi.models.V1NodeList;
 import io.kubernetes.client.openapi.models.V1ServiceList;
 import io.kubernetes.client.util.Config;
 import lombok.extern.slf4j.Slf4j;
