@@ -76,7 +76,6 @@ public class TrackingController {
     // }
 
     @SubscribeMapping(Endpoints.POD)
-    @SendTo("/topic/pod")
     public void sendPods() {
         podTrackerService.handle(template);
     }
