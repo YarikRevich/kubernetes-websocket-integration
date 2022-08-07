@@ -28,13 +28,13 @@ public class KubernetesService {
      */
     public V1PodList getAllPods() {
         CoreV1Api api = new CoreV1Api();
-        V1PodList list = null;
+        V1PodList podList = null;
         try {
-            list = api.listPodForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
+            podList = api.listPodForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
-        return list;
+        return podList;
     }
 
     /**
@@ -43,32 +43,27 @@ public class KubernetesService {
      */
     public V1ServiceList getAllServices(){
         CoreV1Api api = new CoreV1Api();
-        V1ServiceList list = null;
+        V1ServiceList serviceList = null;
         try {
-            list = api.listServiceForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
+            serviceList = api.listServiceForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
-        // for (V1Service service : list.getItems()){
-        //     service.getSpec().getPorts().get(0).getTargetPort().getStrValue()
-        // }
-        
-        // System.out.println(gson.toJson(list));
-        return list;
+        return serviceList;
     }
 
     /**
      * Fetches data of all nodes in Kubernetes cluster
      * @return output of all nodes in YAML format
      */
-    public String getAllNodes(){
+    public V1NodeList getAllNodes(){
         CoreV1Api api = new CoreV1Api();
-        V1NodeList list = null;
+        V1NodeList nodeList = null;
         try {
-            list = api.listNode(null, false, null, null, null, null, null, null, 0, false);
+            nodeList = api.listNode(null, false, null, null, null, null, null, null, 0, false);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
-        return list.toString();
+        return nodeList;
     }
 }

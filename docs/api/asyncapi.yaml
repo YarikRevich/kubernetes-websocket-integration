@@ -2,24 +2,30 @@ asyncapi: 2.2.0
 info:
   title: "kubernetes-websocket"
   description: "WebSocket integration for kubernetes cluster"
-  version: '1.0.0'
+  version: "1.0.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+defaultContentType: application/json
 channels:
   /topic/pod:
     subscribe:
       description: "Lists all the pods in the cluster"
       message:
+        name: "PodList"
         payload:
           type: string
   /topic/service:
     subscribe:
       description: "Lists all the services in the cluster"
       message:
+        name: "ServiceList"
         payload:
           type: string
   /topic/node:
     subscribe:
       description: "Lists all the nodes in the cluster"
       message:
+        name: "NodeList"
         payload:
           type: string
-  
