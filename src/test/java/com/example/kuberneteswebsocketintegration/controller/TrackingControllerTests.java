@@ -27,6 +27,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
@@ -54,6 +55,9 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.*;
+
+import javax.websocket.ContainerProvider;
+import javax.websocket.WebSocketContainer;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -149,14 +153,18 @@ class TrackingControllerTests {
         }
         Configuration.setDefaultApiClient(client);
 
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+        container.setDefaultMaxBinaryMessageBufferSize(600 * 10000);
+        container.setDefaultMaxTextMessageBufferSize(600 * 10000);
+        WebSocketClient transport = new StandardWebSocketClient(container);
+
         this.webSocketStompClient = new WebSocketStompClient(new SockJsClient(
-                List.of(new WebSocketTransport(new StandardWebSocketClient()))));
+                List.of(new WebSocketTransport(transport))));
         webSocketStompClient.setMessageConverter(Converters.getTestGsonMessageConverter());
     }
 
     @Test
     void verifyGreetingIsReceived() throws Exception {
-
         BlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(100);
 
         StompSession session = webSocketStompClient
@@ -168,12 +176,12 @@ class TrackingControllerTests {
 
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return Object.class;
+                return String.class;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                System.out.println(headers);
+                System.out.println((String)payload);
                 // blockingQueue.add((String) payload);
             }
         });

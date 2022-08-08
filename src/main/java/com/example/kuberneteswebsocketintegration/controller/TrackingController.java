@@ -10,6 +10,7 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 
+import com.example.kuberneteswebsocketintegration.service.kubernetes.KubernetesService;
 import com.example.kuberneteswebsocketintegration.service.tracking.NodeTrackingService;
 import com.example.kuberneteswebsocketintegration.service.tracking.PodTrackingService;
 import com.example.kuberneteswebsocketintegration.service.tracking.ServiceTrackingService;
@@ -34,13 +35,17 @@ public class TrackingController {
 
     @Autowired
     private PodTrackingService podTrackerService;
+
+    @Autowired
+    private KubernetesService kubernetesService;
    
     @MessageMapping(Endpoints.POD)
     @SendTo(Topics.POD)
-    public String sendPods() {
+    public void sendPods() {
         //Message<Object> message, @Payload Object chatMessage
         podTrackerService.handle(template);
-        return "";
+        // return kubernetesService.getAllPods();
+        // return "";
     }
 
     @MessageMapping(Endpoints.SERVICE)

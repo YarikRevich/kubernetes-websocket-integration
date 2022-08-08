@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.GsonMessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
@@ -12,6 +13,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
+import org.springframework.web.socket.server.jetty.JettyRequestUpgradeStrategy;
+import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
+import org.springframework.web.socket.sockjs.transport.session.WebSocketServerSockJsSession;
 
 import com.example.kuberneteswebsocketintegration.util.endpoint.Endpoints;
 // import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -63,7 +67,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
   public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-    registration.setMessageSizeLimit(30 * 10000);
-    registration.setSendBufferSizeLimit(60 * 10000);
+    registration.setSendBufferSizeLimit(600 * 10000).setMessageSizeLimit(600 * 10000);
   }
 }

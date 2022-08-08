@@ -4,6 +4,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,7 @@ public class PodTrackingService implements ITrackingService {
         Runnable task = new Runnable() {
             public void run() {
                 try {
-                    ResponseEntity response = new ResponseEntity();
-                    response.setContent(kubernetesService.getAllPods());
-
-                    template.convertAndSend(Topics.POD, response);
+                    template.convertAndSend(Topics.POD, kubernetesService.getAllPods());
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }
