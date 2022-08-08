@@ -1,32 +1,30 @@
 package com.example.kuberneteswebsocketintegration.controller;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+import javax.websocket.ContainerProvider;
+import javax.websocket.WebSocketContainer;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHandler;
-import org.springframework.messaging.SubscribableChannel;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.converter.StringMessageConverter;
-import org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.messaging.support.AbstractSubscribableChannel;
-import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
@@ -38,9 +36,15 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.k3s.K3sContainer;
 import org.testcontainers.utility.DockerImageName;
 
+import com.example.kuberneteswebsocketintegration.config.KubernetesConfig;
+import com.example.kuberneteswebsocketintegration.config.SecurityConfig;
 import com.example.kuberneteswebsocketintegration.config.WebSocketConfig;
 import com.example.kuberneteswebsocketintegration.entity.ResponseEntity;
+import com.example.kuberneteswebsocketintegration.service.kubernetes.KubernetesService;
 import com.example.kuberneteswebsocketintegration.util.converter.Converters;
+import com.example.kuberneteswebsocketintegration.util.formater.ResponseFormater;
+import com.example.kuberneteswebsocketintegration.util.server.TestServer;
+import com.example.kuberneteswebsocketintegration.util.topic.Topics;
 
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.Configuration;
@@ -48,94 +52,16 @@ import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.util.Config;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.lang.reflect.Type;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.*;
-
-import javax.websocket.ContainerProvider;
-import javax.websocket.WebSocketContainer;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-// @RunWith(SpringJUnit4ClassRunner.class)
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-// @ContextConfiguration(classes = {
-// WebSocketConfig.class,
-// TrackingControllerTests.TestConfig.class
-// })
-// @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @Testcontainers
 class TrackingControllerTests {
-
     @LocalServerPort
     private Integer port;
 
-    // @Autowired
-    // private MockMvc mockMvc;
-
-    // @Autowired
-    // private AbstractSubscribableChannel clientInboundChannel;
-
-    // @Autowired
-    // private AbstractSubscribableChannel clientOutboundChannel;
-
-    // @Autowired
-    // private AbstractSubscribableChannel brokerChannel;
-
-    // private TestInterceptor clientOutboundChannelInterceptor;
-
-    // private TestInterceptor brokerChannelInterceptor;
-
-    // @BeforeEach
-    // public void setUp() throws Exception {
-    // this.brokerChannelInterceptor = new TestInterceptor();
-    // this.clientOutboundChannelInterceptor = new TestInterceptor();
-
-    // this.brokerChannel.addInterceptor(this.brokerChannelInterceptor);
-    // this.clientOutboundChannel.addInterceptor(this.clientOutboundChannelInterceptor);
-    // }
-
-    // @Test
-    // public void testSendPod() throws Exception{
-    // StompHeaderAccessor headers =
-    // StompHeaderAccessor.create(StompCommand.SUBSCRIBE);
-    // headers.setSubscriptionId("0");
-    // headers.setDestination("/app/pod");
-    // headers.setSessionId("0");
-    // headers.setSessionAttributes(new HashMap<>());
-    // Message<byte[]> message = MessageBuilder.createMessage(new byte[0],
-    // headers.getMessageHeaders());
-
-    // this.clientOutboundChannelInterceptor.setIncludedDestinations("/app/pod");
-    // this.clientInboundChannel.send(message);
-
-    // Message<?> reply = this.clientOutboundChannelInterceptor.awaitMessage(10);
-    // assertNotNull(reply);
-
-    // StompHeaderAccessor replyHeaders = StompHeaderAccessor.wrap(reply);
-    // assertEquals("0", replyHeaders.getSessionId());
-    // assertEquals("0", replyHeaders.getSubscriptionId());
-    // assertEquals("/app/pod", replyHeaders.getDestination());
-
-    // // String json = new String((byte[]) reply.getPayload(),
-    // Charset.forName("UTF-8"));
-    // // new JsonPathExpectationsHelper("$[0].company").assertValue(json, "Citrix
-    // Systems, Inc.");
-    // // new JsonPathExpectationsHelper("$[1].company").assertValue(json, "Dell
-    // Inc.");
-    // // new JsonPathExpectationsHelper("$[2].company").assertValue(json,
-    // "Microsoft");
-    // // new JsonPathExpectationsHelper("$[3].company").assertValue(json,
-    // "Oracle");
-    // }
+    @Autowired
+    private KubernetesService kubernetesService;
 
     private WebSocketStompClient webSocketStompClient;
 
@@ -165,35 +91,39 @@ class TrackingControllerTests {
 
     @Test
     void verifyGreetingIsReceived() throws Exception {
-        BlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(100);
+        BlockingQueue<ResponseEntity<V1PodList>> blockingQueue = new ArrayBlockingQueue<>(100);
 
         StompSession session = webSocketStompClient
-                .connect(getWsPath(), new StompSessionHandlerAdapter() {
+                .connect(TestServer.getServerEndpoint(port), new StompSessionHandlerAdapter() {
                 })
                 .get(1, SECONDS);
 
-        session.subscribe("/topic/pod", new StompSessionHandlerAdapter() {
+        session.subscribe(Topics.POD, new StompSessionHandlerAdapter() {
 
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return String.class;
+                return ResponseEntity.class;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                System.out.println((String)payload);
-                // blockingQueue.add((String) payload);
+                blockingQueue.add((ResponseEntity<V1PodList>) payload);
             }
         });
 
-        session.send("/app/pod", "gjfkg");
+        session.send("/app/pod", "");
 
         await()
                 .atLeast(10, SECONDS)
-                .untilAsserted(() -> assertEquals("Hello, Mike!", blockingQueue.poll()));
-    }
+                .untilAsserted(() -> {
+                    ResponseEntity<V1PodList> expectedResponse = ResponseFormater
+                            .formatResponseFromPodList(kubernetesService.getAllPods());
+                    ResponseEntity<V1PodList> receivedResponse = blockingQueue.poll();
 
-    private String getWsPath() {
-        return String.format("ws://localhost:%d/ws", port);
+                    assertEquals(expectedResponse.getKind(),
+                            receivedResponse.getKind());
+                    assertEquals(expectedResponse.getContent().getItems().size(),
+                            receivedResponse.getContent().getItems().size());
+                });
     }
 }

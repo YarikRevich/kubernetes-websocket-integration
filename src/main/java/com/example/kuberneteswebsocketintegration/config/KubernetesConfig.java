@@ -11,6 +11,9 @@ import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.Config;
 
 @org.springframework.context.annotation.Configuration
+@ConditionalOnProperty(
+        name = "spring.profiles.active",
+        havingValue = "test")
 public class KubernetesConfig {
     /**
      * Configures local Kubernetes cluster config
