@@ -8,6 +8,7 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.example.kuberneteswebsocketintegration.entity.ResponseEntity;
 import com.example.kuberneteswebsocketintegration.service.kubernetes.KubernetesService;
 import com.example.kuberneteswebsocketintegration.service.tracking.common.ITrackingService;
 import com.example.kuberneteswebsocketintegration.util.topic.Topics;
@@ -29,7 +30,10 @@ public class PodTrackingService implements ITrackingService {
         Runnable task = new Runnable() {
             public void run() {
                 try {
-                    template.convertAndSend(Topics.POD, kubernetesService.getAllPods());
+                    ResponseEntity response = new ResponseEntity();
+                    response.setContent(kubernetesService.getAllPods());
+
+                    template.convertAndSend(Topics.POD, response);
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }

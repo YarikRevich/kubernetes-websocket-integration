@@ -15,14 +15,14 @@ public class KubernetesConfig {
     /**
      * Configures local Kubernetes cluster config
      */
-    @PostConstruct
-    public void configureKubernetesConfig() {
-        ApiClient client = null;
-        try {
-            client = Config.defaultClient();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Configuration.setDefaultApiClient(client);
-    }
+    // @PostConstruct
+    // public void configureKubernetesConfig() {
+    //     ApiClient client = null;
+    //     try {
+    //         client = Config.defaultClient();
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    //     Configuration.setDefaultApiClient(client);
+    // }
 }
