@@ -14,6 +14,7 @@ import com.example.kuberneteswebsocketintegration.service.kubernetes.KubernetesS
 import com.example.kuberneteswebsocketintegration.service.tracking.common.ITrackingService;
 import com.example.kuberneteswebsocketintegration.util.topic.Topics;
 
+import io.kubernetes.client.openapi.models.V1PodList;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,7 +32,11 @@ public class PodTrackingService implements ITrackingService {
         Runnable task = new Runnable() {
             public void run() {
                 try {
-                    template.convertAndSend(Topics.POD, kubernetesService.getAllPods());
+                    ResponseEntity<V1PodList> response = new ResponseEntity<>();
+                    response.setKind(ResponseEntity.Kind.PodList);
+                    response.setContent(kubernetesService.getAllPods());
+
+                    template.convertAndSend(Topics.POD, response);
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 }

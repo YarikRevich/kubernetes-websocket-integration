@@ -35,30 +35,22 @@ public class TrackingController {
 
     @Autowired
     private PodTrackingService podTrackerService;
-
-    @Autowired
-    private KubernetesService kubernetesService;
    
     @MessageMapping(Endpoints.POD)
     @SendTo(Topics.POD)
     public void sendPods() {
-        //Message<Object> message, @Payload Object chatMessage
         podTrackerService.handle(template);
-        // return kubernetesService.getAllPods();
-        // return "";
     }
 
     @MessageMapping(Endpoints.SERVICE)
     @SendTo(Topics.SERVICE)
-    public String sendServices() {
+    public void sendServices() {
         serviceTrackerService.handle(template);
-        return "";
     }
 
     @MessageMapping(Endpoints.NODE)
     @SendTo(Topics.NODE)
-    public String sendNodes() {
+    public void sendNodes() {
         nodeTrackerService.handle(template);
-        return "";
     }
 }

@@ -1,4 +1,4 @@
-package com.example.kuberneteswebsocketintegration.util.endpoint;
+package com.example.kuberneteswebsocketintegration.util.server;
 
 /**
  * Contains all the utility methods used for testing
