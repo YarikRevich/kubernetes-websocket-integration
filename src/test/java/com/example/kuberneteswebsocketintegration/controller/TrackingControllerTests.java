@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import javax.websocket.ContainerProvider;
 import javax.websocket.WebSocketContainer;
@@ -23,6 +24,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.messaging.simp.stomp.StompSession.Subscription;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.socket.client.WebSocketClient;
@@ -48,26 +50,27 @@ import com.example.kuberneteswebsocketintegration.util.topic.Topics;
 
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.Configuration;
+import io.kubernetes.client.openapi.models.V1NodeList;
 import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.util.Config;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
 @Testcontainers
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TrackingControllerTests {
     @LocalServerPort
     private Integer port;
+
+    @Container
+    public static K3sContainer k3s = new K3sContainer(DockerImageName.parse("rancher/k3s:v1.21.3-k3s1"))
+            .withLogConsumer(new Slf4jLogConsumer(log));
 
     @Autowired
     private KubernetesService kubernetesService;
 
     private WebSocketStompClient webSocketStompClient;
-
-    @Container
-    public static K3sContainer k3s = new K3sContainer(DockerImageName.parse("rancher/k3s:v1.21.3-k3s1"))
-            .withLogConsumer(new Slf4jLogConsumer(log));
 
     @BeforeEach
     public void setUp() {
@@ -89,41 +92,100 @@ class TrackingControllerTests {
         webSocketStompClient.setMessageConverter(Converters.getTestGsonMessageConverter());
     }
 
-    @Test
-    void verifyGreetingIsReceived() throws Exception {
-        BlockingQueue<ResponseEntity<V1PodList>> blockingQueue = new ArrayBlockingQueue<>(100);
+    // @Test
+    // void testSendPods() throws Exception {
+    //     BlockingQueue<ResponseEntity<V1PodList>> blockingQueue = new ArrayBlockingQueue<>(100);
 
-        StompSession session = webSocketStompClient
+    //     webSocketStompClient
+    //             .connect(TestServer.getServerEndpoint(port), new StompSessionHandlerAdapter() {
+    //                 @Override
+    //                 public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+    //                     log.info("Connection established!");
+
+    //                     session.subscribe(Topics.POD, new StompSessionHandlerAdapter() {
+    //                         @Override
+    //                         public Type getPayloadType(StompHeaders headers) {
+    //                             return ResponseEntity.class;
+    //                         }
+
+    //                         @Override
+    //                         public void handleFrame(StompHeaders headers, Object payload) {
+    //                             System.out.println("RECEIVED!");
+    //                             blockingQueue.add((ResponseEntity<V1PodList>) payload);
+    //                         }
+    //                     });
+
+    //                     session.send("/app/pod", "");
+
+    //                     await()
+    //                             .until(() -> {
+    //                                 return blockingQueue.size() > 0;
+    //                             });
+
+    //                     // .untilAsserted(() -> {
+    //                     ResponseEntity<V1PodList> expectedResponse = ResponseFormater
+    //                             .formatResponseFromPodList(kubernetesService.getAllPods());
+    //                     ResponseEntity<V1PodList> receivedResponse = blockingQueue.poll();
+
+    //                     System.out.println(expectedResponse.getKind());
+    //                     System.out.println(receivedResponse.getKind());
+
+    //                     // assertEquals(expectedResponse.getKind(),
+    //                     // receivedResponse.getKind());
+    //                     // assertEquals(expectedResponse.getContent().getItems().size(),
+    //                     // receivedResponse.getContent().getItems().size());
+    //                     // })
+    //                 }
+    //             })
+    //             .get(1, SECONDS);
+    // }
+
+
+    @Test
+    void testSendNodes() throws Exception {
+        BlockingQueue<ResponseEntity<V1NodeList>> blockingQueue = new ArrayBlockingQueue<>(100);
+
+        webSocketStompClient
                 .connect(TestServer.getServerEndpoint(port), new StompSessionHandlerAdapter() {
+                    @Override
+                    public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+                        log.info("Connection established!");
+
+                        session.subscribe(Topics.NODE, new StompSessionHandlerAdapter() {
+                            @Override
+                            public Type getPayloadType(StompHeaders headers) {
+                                return ResponseEntity.class;
+                            }
+
+                            @Override
+                            public void handleFrame(StompHeaders headers, Object payload) {
+                                System.out.println("RECEIVED!");
+                                blockingQueue.add((ResponseEntity<V1NodeList>) payload);
+                            }
+                        });
+
+                        session.send("/app/node", "");
+
+                        await()
+                                .until(() -> {
+                                    return blockingQueue.size() > 0;
+                                });
+
+                        // .untilAsserted(() -> {
+                        ResponseEntity<V1NodeList> expectedResponse = ResponseFormater
+                                .formatResponseFromNodeList(kubernetesService.getAllNodes());
+                        ResponseEntity<V1NodeList> receivedResponse = blockingQueue.poll();
+
+                        System.out.println(expectedResponse.getKind());
+                        System.out.println(receivedResponse.getKind());
+
+                        // assertEquals(expectedResponse.getKind(),
+                        // receivedResponse.getKind());
+                        // assertEquals(expectedResponse.getContent().getItems().size(),
+                        // receivedResponse.getContent().getItems().size());
+                        // })
+                    }
                 })
                 .get(1, SECONDS);
-
-        session.subscribe(Topics.POD, new StompSessionHandlerAdapter() {
-
-            @Override
-            public Type getPayloadType(StompHeaders headers) {
-                return ResponseEntity.class;
-            }
-
-            @Override
-            public void handleFrame(StompHeaders headers, Object payload) {
-                blockingQueue.add((ResponseEntity<V1PodList>) payload);
-            }
-        });
-
-        session.send("/app/pod", "");
-
-        await()
-                .atLeast(10, SECONDS)
-                .untilAsserted(() -> {
-                    ResponseEntity<V1PodList> expectedResponse = ResponseFormater
-                            .formatResponseFromPodList(kubernetesService.getAllPods());
-                    ResponseEntity<V1PodList> receivedResponse = blockingQueue.poll();
-
-                    assertEquals(expectedResponse.getKind(),
-                            receivedResponse.getKind());
-                    assertEquals(expectedResponse.getContent().getItems().size(),
-                            receivedResponse.getContent().getItems().size());
-                });
     }
 }

@@ -33,40 +33,40 @@ import com.google.gson.JsonSerializer;
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-  @Override
-  public void configureMessageBroker(MessageBrokerRegistry config) {
-    config.enableSimpleBroker("/topic");
-    config.setApplicationDestinationPrefixes(Endpoints.APPLICATION_DESTINATION);
-  }
+	@Override
+	public void configureMessageBroker(MessageBrokerRegistry config) {
+		config.enableSimpleBroker(Endpoints.RESPONSE_DESTINATION);
+		config.setApplicationDestinationPrefixes(Endpoints.APPLICATION_DESTINATION);
+	}
 
-  @Override
-  public boolean configureMessageConverters(List<MessageConverter> converters) {
-    JsonSerializer<OffsetDateTime> serializer = new JsonSerializer<OffsetDateTime>() {
-      @Override
-      public JsonElement serialize(OffsetDateTime src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject result = new JsonObject();
+	@Override
+	public boolean configureMessageConverters(List<MessageConverter> converters) {
+		JsonSerializer<OffsetDateTime> serializer = new JsonSerializer<OffsetDateTime>() {
+			@Override
+			public JsonElement serialize(OffsetDateTime src, Type typeOfSrc, JsonSerializationContext context) {
+				JsonObject result = new JsonObject();
 
-        result.addProperty("dateTime", src.toString());
+				result.addProperty("dateTime", src.toString());
 
-        return result;
-      }
-    };
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(OffsetDateTime.class, serializer)
-        .create();
-    GsonMessageConverter converter = new GsonMessageConverter();
-    converter.setGson(gson);
-    converters.add(converter);
-    return false;
-  }
+				return result;
+			}
+		};
+		Gson gson = new GsonBuilder()
+				.registerTypeAdapter(OffsetDateTime.class, serializer)
+				.create();
+		GsonMessageConverter converter = new GsonMessageConverter();
+		converter.setGson(gson);
+		converters.add(converter);
+		return false;
+	}
 
-  @Override
-  public void registerStompEndpoints(StompEndpointRegistry registry) {
-    registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
-  }
+	@Override
+	public void registerStompEndpoints(StompEndpointRegistry registry) {
+		registry.addEndpoint(Endpoints.WEBSOCKET_DESTINATION).setAllowedOriginPatterns("*").withSockJS();
+	}
 
-  @Override
-  public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-    registration.setSendBufferSizeLimit(600 * 10000).setMessageSizeLimit(600 * 10000);
-  }
+	@Override
+	public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+		registration.setSendBufferSizeLimit(600 * 10000).setMessageSizeLimit(600 * 10000);
+	}
 }
