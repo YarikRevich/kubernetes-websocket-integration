@@ -1,15 +1,11 @@
 package com.example.kuberneteswebsocketintegration.service.kubernetes;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.google.gson.Gson;
 
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1NodeList;
 import io.kubernetes.client.openapi.models.V1PodList;
-import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.openapi.models.V1ServiceList;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,9 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class KubernetesService {
-    
-
-
     /**
      * Fetches data of all pods in Kubernetes cluster
      * @return output of all pods in YAML format
@@ -30,7 +23,7 @@ public class KubernetesService {
         CoreV1Api api = new CoreV1Api();
         V1PodList podList = null;
         try {
-            podList = api.listPodForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
+            podList = api.listPodForAllNamespaces(null, null, null, null, 0, null, null, null, 0, null);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
@@ -45,7 +38,7 @@ public class KubernetesService {
         CoreV1Api api = new CoreV1Api();
         V1ServiceList serviceList = null;
         try {
-            serviceList = api.listServiceForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
+            serviceList = api.listServiceForAllNamespaces(null, null, null, null, 0, null, null, null, 0, null);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
@@ -60,7 +53,7 @@ public class KubernetesService {
         CoreV1Api api = new CoreV1Api();
         V1NodeList nodeList = null;
         try {
-            nodeList = api.listNode(null, false, null, null, null, null, null, null, 0, false);
+            nodeList = api.listNode(null, null, null, null, null, null, null, null, 0, null);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }

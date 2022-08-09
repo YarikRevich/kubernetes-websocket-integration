@@ -8,6 +8,9 @@ public class Endpoints {
     public final static String NODE = "node";
 
     public final static String APPLICATION_DESTINATION = "/app";
+    public final static String RESPONSE_DESTINATION = "/topic";
+
+    public final static String WEBSOCKET_DESTINATION = "/ws";
 
     /**
      * Formats endpoint for application access using
