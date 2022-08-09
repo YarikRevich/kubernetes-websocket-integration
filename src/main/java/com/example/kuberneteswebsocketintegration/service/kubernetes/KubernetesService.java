@@ -23,10 +23,9 @@ public class KubernetesService {
         CoreV1Api api = new CoreV1Api();
         V1PodList podList = null;
         try {
-            podList = api.listPodForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
+            podList = api.listPodForAllNamespaces(null, null, null, null, 0, null, null, null, 0, null);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
-            log.error(e.getResponseBody());
         }
         return podList;
     }
@@ -39,7 +38,7 @@ public class KubernetesService {
         CoreV1Api api = new CoreV1Api();
         V1ServiceList serviceList = null;
         try {
-            serviceList = api.listServiceForAllNamespaces(false, null, null, null, 0, null, null, null, 0, false);
+            serviceList = api.listServiceForAllNamespaces(null, null, null, null, 0, null, null, null, 0, null);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
@@ -54,7 +53,7 @@ public class KubernetesService {
         CoreV1Api api = new CoreV1Api();
         V1NodeList nodeList = null;
         try {
-            nodeList = api.listNode(null, false, null, null, null, null, null, null, 0, false);
+            nodeList = api.listNode(null, null, null, null, null, null, null, null, 0, null);
         } catch (ApiException e) {
             log.error("Kubernetes API is not accessible");
         }
