@@ -12,20 +12,57 @@ channels:
     subscribe:
       description: "Lists all the pods in the cluster"
       message:
-        name: "PodList"
-        payload:
-          type: string
+        $ref: "#/components/messages/podListResponse"
   /topic/service:
     subscribe:
       description: "Lists all the services in the cluster"
       message:
-        name: "ServiceList"
-        payload:
-          type: string
+        $ref: "#/components/messages/serviceListResponse"
   /topic/node:
     subscribe:
       description: "Lists all the nodes in the cluster"
       message:
-        name: "NodeList"
-        payload:
-          type: string
+        $ref: "#/components/messages/nodeListResponse"
+
+components:
+  messages: 
+    podListResponse:
+      description: "Lists all the pods in the cluster"
+      payload:
+        $ref: "#/components/schemas/response"
+      examples:
+        - name: "podListResponse"
+          payload:
+            kind: "PodList"
+            content: object
+    serviceListResponse:
+      description: "Lists all the services in the cluster"
+      payload:
+        $ref: "#/components/schemas/response"
+      examples:
+        - name: "serviceListResponse"
+          payload:
+            kind: "ServiceList"
+            content: object
+    nodeListResponse:
+      description: "Lists all the nodes in the cluster"
+      payload:
+        $ref: "#/components/schemas/response"
+      examples:
+        - name: "nodeListResponse"
+          payload:
+            kind: "NodeList"
+            content: object
+  schemas:
+    response:
+      additionalProperties: false
+      properties:
+        kind:
+            type: string
+            description: "Kind of resource returned by Kubernetes cluster"
+        content:
+            type: object
+            description: "Data about resource returned by Kubernetes cluster"
+      required:
+        - kind
+        - content
