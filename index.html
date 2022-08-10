@@ -115,28 +115,28 @@
     <ul class="text-sm list-reset mt-2">
       
         <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-          href="#message-PodList">
+          href="#message-podListResponse">
           <div style="display:inline-block;">
             
-<span class="string-chunk" style="padding-top: 2px;">PodList</span>
+<span class="string-chunk" style="padding-top: 2px;">podListResponse</span>
 
           </div>
         </a>
       
         <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-          href="#message-ServiceList">
+          href="#message-serviceListResponse">
           <div style="display:inline-block;">
             
-<span class="string-chunk" style="padding-top: 2px;">ServiceList</span>
+<span class="string-chunk" style="padding-top: 2px;">serviceListResponse</span>
 
           </div>
         </a>
       
         <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-          href="#message-NodeList">
+          href="#message-nodeListResponse">
           <div style="display:inline-block;">
             
-<span class="string-chunk" style="padding-top: 2px;">NodeList</span>
+<span class="string-chunk" style="padding-top: 2px;">nodeListResponse</span>
 
           </div>
         </a>
@@ -218,8 +218,6 @@
     
     
       
-        <span class="border text-orange rounded text-s py-0 px-2">PodList</span>
-      
     
   </div>
   <p class="text-grey-dark text-sm"></p>
@@ -233,7 +231,8 @@
 
 
 
-  <div class="mt-4 mb-4 markdown"></div>
+  <div class="mt-4 mb-4 markdown"><p>Lists all the pods in the cluster</p>
+</div>
   
 <div>
   
@@ -256,7 +255,7 @@
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-string
+
           
           
           
@@ -286,6 +285,164 @@ string
     
       <div class="children bg-grey-lightest py-4 rounded">
         
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">kind</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Kind of resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">content</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Data about resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
           
         
 
@@ -333,7 +490,7 @@ string
   
 
 <form>
-  <h5 class="examples-uid text-orange mt-4">PodList</h5>
+  <h5 class="examples-uid text-orange mt-4">podListResponse</h5>
   
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
@@ -347,8 +504,13 @@ string
       </div>
       <div class="children payload-examples mt-4">
         
-        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>"string"</code></pre>
-        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+          
+            <h6 class="text-xs font-bold text-grey-darker">Example #1</h6>
+            <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "kind": "PodList",
+  "content": "object"
+}</code></pre>
+          
         
       </div>
     </div>
@@ -407,8 +569,6 @@ string
     
     
       
-        <span class="border text-orange rounded text-s py-0 px-2">ServiceList</span>
-      
     
   </div>
   <p class="text-grey-dark text-sm"></p>
@@ -422,7 +582,8 @@ string
 
 
 
-  <div class="mt-4 mb-4 markdown"></div>
+  <div class="mt-4 mb-4 markdown"><p>Lists all the services in the cluster</p>
+</div>
   
 <div>
   
@@ -445,7 +606,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-string
+
           
           
           
@@ -475,6 +636,164 @@ string
     
       <div class="children bg-grey-lightest py-4 rounded">
         
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">kind</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Kind of resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">content</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Data about resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
           
         
 
@@ -522,7 +841,7 @@ string
   
 
 <form>
-  <h5 class="examples-uid text-orange mt-4">ServiceList</h5>
+  <h5 class="examples-uid text-orange mt-4">serviceListResponse</h5>
   
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
@@ -536,8 +855,13 @@ string
       </div>
       <div class="children payload-examples mt-4">
         
-        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>"string"</code></pre>
-        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+          
+            <h6 class="text-xs font-bold text-grey-darker">Example #1</h6>
+            <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "kind": "ServiceList",
+  "content": "object"
+}</code></pre>
+          
         
       </div>
     </div>
@@ -596,8 +920,6 @@ string
     
     
       
-        <span class="border text-orange rounded text-s py-0 px-2">NodeList</span>
-      
     
   </div>
   <p class="text-grey-dark text-sm"></p>
@@ -611,7 +933,8 @@ string
 
 
 
-  <div class="mt-4 mb-4 markdown"></div>
+  <div class="mt-4 mb-4 markdown"><p>Lists all the nodes in the cluster</p>
+</div>
   
 <div>
   
@@ -634,7 +957,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-string
+
           
           
           
@@ -664,6 +987,164 @@ string
     
       <div class="children bg-grey-lightest py-4 rounded">
         
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">kind</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Kind of resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">content</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Data about resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
           
         
 
@@ -711,7 +1192,7 @@ string
   
 
 <form>
-  <h5 class="examples-uid text-orange mt-4">NodeList</h5>
+  <h5 class="examples-uid text-orange mt-4">nodeListResponse</h5>
   
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
@@ -725,8 +1206,13 @@ string
       </div>
       <div class="children payload-examples mt-4">
         
-        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>"string"</code></pre>
-        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+          
+            <h6 class="text-xs font-bold text-grey-darker">Example #1</h6>
+            <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "kind": "NodeList",
+  "content": "object"
+}</code></pre>
+          
         
       </div>
     </div>
@@ -755,7 +1241,7 @@ string
   <div class="center-block p-8">
     <div class="pb-8">
       
-      <a name="message-PodList"></a>
+      <a name="message-podListResponse"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
@@ -765,8 +1251,6 @@ string
     
     
       
-        <span class="border text-orange rounded text-s py-0 px-2">PodList</span>
-      
     
   </div>
   <p class="text-grey-dark text-sm"></p>
@@ -780,7 +1264,8 @@ string
 
 
 
-  <div class="mt-4 mb-4 markdown"></div>
+  <div class="mt-4 mb-4 markdown"><p>Lists all the pods in the cluster</p>
+</div>
   
 <div>
   
@@ -803,7 +1288,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-string
+
           
           
           
@@ -834,6 +1319,164 @@ string
       <div class="children bg-grey-lightest py-4 rounded">
         
           
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">kind</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Kind of resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">content</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Data about resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
         
 
         
@@ -861,7 +1504,7 @@ string
 
 
       
-      <a name="message-ServiceList"></a>
+      <a name="message-serviceListResponse"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
@@ -871,8 +1514,6 @@ string
     
     
       
-        <span class="border text-orange rounded text-s py-0 px-2">ServiceList</span>
-      
     
   </div>
   <p class="text-grey-dark text-sm"></p>
@@ -886,7 +1527,8 @@ string
 
 
 
-  <div class="mt-4 mb-4 markdown"></div>
+  <div class="mt-4 mb-4 markdown"><p>Lists all the services in the cluster</p>
+</div>
   
 <div>
   
@@ -909,7 +1551,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-string
+
           
           
           
@@ -940,6 +1582,164 @@ string
       <div class="children bg-grey-lightest py-4 rounded">
         
           
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">kind</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Kind of resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">content</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Data about resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
         
 
         
@@ -967,7 +1767,7 @@ string
 
 
       
-      <a name="message-NodeList"></a>
+      <a name="message-nodeListResponse"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
@@ -977,8 +1777,6 @@ string
     
     
       
-        <span class="border text-orange rounded text-s py-0 px-2">NodeList</span>
-      
     
   </div>
   <p class="text-grey-dark text-sm"></p>
@@ -992,7 +1790,8 @@ string
 
 
 
-  <div class="mt-4 mb-4 markdown"></div>
+  <div class="mt-4 mb-4 markdown"><p>Lists all the nodes in the cluster</p>
+</div>
   
 <div>
   
@@ -1015,7 +1814,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-string
+
           
           
           
@@ -1045,6 +1844,164 @@ string
     
       <div class="children bg-grey-lightest py-4 rounded">
         
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">kind</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Kind of resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">content</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Data about resource returned by Kubernetes cluster</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
           
         
 
